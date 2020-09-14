@@ -1,0 +1,34 @@
+import React from "react";
+
+export default ({ image, color = "rgba(190, 190, 190, 0.55)", ...props }) => {
+  const commonProps = {
+    position: "fixed",
+    height: "100vh",
+    width: "100vw",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  };
+
+  return (
+    <div {...props}>
+      {image && (
+        <div
+          style={{
+            ...commonProps,
+            backgroundImage: `url(${image})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+        />
+      )}
+      <div
+        style={{
+          ...commonProps,
+          backgroundColor: color,
+        }}
+      />
+    </div>
+  );
+};
