@@ -5,7 +5,17 @@
   user-select: none; /* Likely future */
 }
 
-.black-stroke {
+.green-stroke {
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: rgb(50, 90, 10);
+}
+
+.green-black {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
+}
+
+.white-stroke {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
 }

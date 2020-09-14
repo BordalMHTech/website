@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ image, color = "rgba(190, 190, 190, 0.55)", ...props }) => {
+export default ({ image, color = "rgba(150, 150, 150, 0.55)", ...props }) => {
   const commonProps = {
     position: "fixed",
     height: "100vh",
