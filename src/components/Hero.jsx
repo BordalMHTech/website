@@ -32,6 +32,7 @@ export default () => {
           {subtitle}
         </h3>
       </div>
+      <hr />
     </>
   );
 };
