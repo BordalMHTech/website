@@ -11,7 +11,7 @@ export default () => {
   const { register, handleSubmit } = useForm();
 
   const [policies, setPolicies] = useState(_.cloneDeep(defaultPolicies));
-  const [percentages, setPercentages] = useState(defaultPercentages);
+  const [percentages] = useState(defaultPercentages);
 
   const handlePolicyChange = (index, checked) => {
     const newPolicies = _.clone(policies);
@@ -20,8 +20,6 @@ export default () => {
   };
 
   const resetPolicies = () => {
-    console.log("resetPolicies -> defaultPolicies", defaultPolicies);
-    console.log("resetPolicies -> policies", policies);
     setPolicies(_.cloneDeep(defaultPolicies));
   };
 
