@@ -44,8 +44,13 @@ export default () => {
                 ref={register({ required: true })}
                 name="municipality"
               >
-                {municipalities.map((municipality) => (
-                  <option value={municipality}>{municipality}</option>
+                {municipalities.map((municipality, index) => (
+                  <option
+                    key={`municipality-${municipality}-${index}`}
+                    value={municipality}
+                  >
+                    {municipality}
+                  </option>
                 ))}
               </Form.Control>
             </Form.Group>
@@ -59,8 +64,10 @@ export default () => {
                 ref={register({ required: true })}
                 name="vehicle"
               >
-                {vehicles.map((vehicle) => (
-                  <option value={vehicle}>{vehicle}</option>
+                {vehicles.map((vehicle, index) => (
+                  <option key={`vehicle-${vehicle}-${index}`} value={vehicle}>
+                    {vehicle}
+                  </option>
                 ))}
               </Form.Control>
             </Form.Group>
@@ -86,6 +93,7 @@ export default () => {
         <div className="mb-3">
           {policies.map((policy, index) => (
             <Form.Check
+              key={`policy-${policy.id}-${index}`}
               className="mb-3 unselectable"
               custom
               inline
@@ -103,8 +111,13 @@ export default () => {
         </div>
 
         <Row>
-          {percentages.map((percentage) => (
-            <Col xs="12" sm="6" lg="3">
+          {percentages.map((percentage, index) => (
+            <Col
+              key={`percentage-${percentage.id}-${index}`}
+              xs="12"
+              sm="6"
+              lg="3"
+            >
               <Form.Group>
                 <Form.Label>{percentage.label}</Form.Label>
                 <InputGroup>
