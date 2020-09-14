@@ -9,6 +9,7 @@ export default ({ image, color = "rgba(190, 190, 190, 0.55)", ...props }) => {
     bottom: 0,
     left: 0,
     right: 0,
+    zIndex: -1,
   };
 
   return (
@@ -20,6 +21,7 @@ export default ({ image, color = "rgba(190, 190, 190, 0.55)", ...props }) => {
             backgroundImage: `url(${image})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
       )}

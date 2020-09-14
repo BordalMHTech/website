@@ -6,17 +6,19 @@ import defaultPolicies from "data/policies";
 import defaultPercentages from "data/percentages";
 import municipalities from "data/municipalities";
 import vehicles from "data/vehicles";
+import Title from "components/Title";
 
-export default () => {
+export default (props) => {
   const { register, handleSubmit } = useForm();
 
   const [policies, setPolicies] = useState(_.cloneDeep(defaultPolicies));
   const [percentages] = useState(defaultPercentages);
 
   const handlePolicyChange = (index, checked) => {
-    const newPolicies = _.clone(policies);
-    newPolicies[index]["checked"] = checked;
-    setPolicies(newPolicies);
+    setPolicies((policies) => {
+      policies[index]["checked"] = checked;
+      return [...policies];
+    });
   };
 
   const resetPolicies = () => {
@@ -30,7 +32,7 @@ export default () => {
   };
 
   return (
-    <>
+    <div {...props}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
           <Col xs="12" sm="6">
@@ -71,23 +73,26 @@ export default () => {
             </Form.Group>
           </Col>
         </Row>
-        <div className="w-100 d-flex justify-content-between align-items-end flex-wrap">
-          <h4 className="mt-3">Tiltak</h4>
-          <Button
-            variant="light"
-            size="lg"
-            className="px-2 pb-1 py-0 mb-1 border"
-            type="button"
-            onClick={() => resetPolicies()}
-          >
-            &#10226;
-            <small>
-              Tilbakestill <span className="d-none d-sm-inline">tiltak</span>
-            </small>
-          </Button>
-        </div>
 
-        <hr className="mt-0" />
+        <Title
+          append={
+            <Button
+              variant="light"
+              size="lg"
+              className="px-2 pb-1 py-0 mb-1 border"
+              type="button"
+              onClick={() => resetPolicies()}
+            >
+              &#10226;
+              <small>
+                Tilbakestill <span className="d-none d-sm-inline">tiltak</span>
+              </small>
+            </Button>
+          }
+        >
+          Tiltak
+        </Title>
+
         <div className="mb-3">
           {policies.map((policy, index) => (
             <Form.Check
@@ -101,9 +106,7 @@ export default () => {
               onChange={(e) => {
                 handlePolicyChange(index, e.target.checked);
               }}
-              // name={checkbox.id}
               id={policy.id}
-              // ref={register}
             />
           ))}
         </div>
@@ -137,14 +140,13 @@ export default () => {
             Kalkuler
           </Button>
         </div>
-        <h4 className="mt-3">Data</h4>
-        <hr className="mt-n1" />
+
+        <Title>Data</Title>
         <pre className="mt-3">{JSON.stringify(data, 0, 2)}</pre>
 
-        <h4 className="mt-3">Tiltak</h4>
-        <hr className="mt-n1" />
+        <Title>Tiltak</Title>
         <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre>
       </Form>
-    </>
+    </div>
   );
 };
