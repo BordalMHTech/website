@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Title from "components/Title";
 import exampleData from "data/example.json";
 import "styles/semiotic.css";
-import { Table } from "react-bootstrap";
+import { Button, ButtonGroup, Table } from "react-bootstrap";
 // import _ from "lodash";
 
 import { ResponsiveLine } from "@nivo/line";
@@ -139,71 +139,108 @@ export default ({ data, ...props }) => {
       );
     };
 
-    return (
-      data &&
-      data.map((d, index) => {
-        return (
+    const Graph = ({ d, index }) => {
+      const [percent, setPercent] = useState(false);
+      return (
+        <div
+          className="mt-3 pb-3"
+          style={{ width: "100%", height: 400, maxHeight: "50vh" }}
+        >
           <div
-            className="mt-3 pb-3"
-            style={{ width: "100%", height: 400, maxHeight: "50vh" }}
-            key={`graph-${index}`}
+            className="d-flex w-100 justify-content-between"
+            style={{ position: "relative", top: 40 }}
           >
-            <div style={{ height: 0 }}>
-              <div
-                className="d-flex align-items-center"
-                style={{ position: "relative", top: 20, left: 38 }}
+            <div
+              className="d-flex align-items-center w-100"
+              style={{ position: "relative", left: 38 }}
+            >
+              <h6 className="text-center my-0 py-0">{d.title}</h6>
+              {/* Big screen */}
+              <span
+                className="d-none d-sm-inline"
+                style={{ position: "relative", top: 1 }}
               >
-                <h6 className="text-center my-0 py-0">{d.title}</h6>
                 <span className="ml-1 text-muted"> per år</span>
                 <span className="ml-1 text-muted">[{d["unit"]}]</span>
-              </div>
+              </span>
+              {/* Small screen */}
+              <span
+                className="d-inline d-sm-none"
+                style={{ position: "relative", top: 1 }}
+              >
+                <span className="text-muted">/år</span>
+              </span>
             </div>
-            <ResponsiveLine
-              motionStiffness={110}
-              motionDamping={17}
-              data={d.data}
-              margin={{ top: 50, right: 5, bottom: 60, left: 40 }}
-              xScale={{ type: "point" }}
-              yScale={{
-                type: "linear",
-                min: "auto",
-                max: "auto",
-                reverse: false,
-              }}
-              axisTop={null}
-              axisRight={null}
-              axisBottom={{
-                orient: "bottom",
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: -45,
-              }}
-              axisLeft={{
-                orient: "left",
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: -45,
-                legendOffset: -45,
-                legendPosition: "middle",
-              }}
-              colors={(e) => e["color"]}
-              enablePoints={false}
-              enableArea={true}
-              areaOpacity={0.05}
-              curve="natural"
-              useMesh={true}
-            />
-            <Legend data={d} />
+            <ButtonGroup
+              className="ml-3"
+              size="sm"
+              aria-label="Percent/total toggle"
+              style={{ zIndex: 1 }}
+            >
+              <Button variant="light" className="border">
+                <span className="d-none d-sm-inline">Prosent</span>
+                <span className="d-inline d-sm-none">%</span>
+              </Button>
+              <Button variant="light" className="border">
+                <span className="d-none d-sm-inline">Antall</span>
+                <span className="d-inline d-sm-none">#</span>
+              </Button>
+            </ButtonGroup>
           </div>
-        );
-      })
+          <ResponsiveLine
+            motionStiffness={110}
+            motionDamping={17}
+            data={d.data}
+            margin={{ top: 50, right: 5, bottom: 60, left: 40 }}
+            xScale={{ type: "point" }}
+            yScale={{
+              type: "linear",
+              min: "auto",
+              max: "auto",
+              reverse: false,
+            }}
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              orient: "bottom",
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: -45,
+            }}
+            axisLeft={{
+              orient: "left",
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: -45,
+              legendOffset: -45,
+              legendPosition: "middle",
+            }}
+            colors={(e) => e["color"]}
+            enablePoints={false}
+            enableArea={true}
+            areaOpacity={0.05}
+            curve="natural"
+            useMesh={true}
+          />
+          <Legend data={d} />
+        </div>
+      );
+    };
+
+    return (
+      data &&
+      data.map((d, index) => (
+        <Graph key={`graph-${index}`} d={d} index={index} />
+      ))
     );
   };
 
   return (
     <div {...props}>
       <Title>Resultat</Title>
+      {/* Big screen table */}
       <FinalTable className="d-none d-sm-table w-100" style={{}} />
+      {/* Small screen table */}
       <FinalTable
         className="d-table d-sm-none w-100"
         style={{ fontSize: 9.5 }}
