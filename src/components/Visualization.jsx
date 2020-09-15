@@ -1,111 +1,120 @@
 import React from "react";
 import Title from "components/Title";
-import ResponsiveXYFrame from "semiotic/lib/ResponsiveXYFrame";
 import exampleData from "data/example.json";
 import "styles/semiotic.css";
 
-const data = [
-  {
-    vehicle: "El",
-    coordinates: [
-      {
-        year: 2028,
-        amount: Math.random() * 1000,
-        sold: Math.random() * 1000,
-        co2: Math.random() * 1000,
-      },
-      {
-        year: 2029,
-        amount: Math.random() * 1000,
-        sold: Math.random() * 1000,
-        co2: Math.random() * 1000,
-      },
-      {
-        year: 2030,
-        amount: Math.random() * 1000,
-        sold: Math.random() * 1000,
-        co2: Math.random() * 1000,
-      },
-    ],
-  },
-  {
-    vehicle: "Hydrogen",
-    coordinates: [
-      {
-        year: 2028,
-        amount: Math.random() * 1000,
-        sold: Math.random() * 1000,
-        co2: Math.random() * 1000,
-      },
-      {
-        year: 2029,
-        amount: Math.random() * 1000,
-        sold: Math.random() * 1000,
-        co2: Math.random() * 1000,
-      },
-      {
-        year: 2030,
-        amount: Math.random() * 1000,
-        sold: Math.random() * 1000,
-        co2: Math.random() * 1000,
-      },
-    ],
-  },
-];
+import { ResponsiveLine } from "@nivo/line";
+// Gives depreciation warning, but fixes are hopefully on the way:
+// https://github.com/plouc/nivo/issues/884
 
-// const formatData = (input) => {
-//   input.map((category, index) => {
-//     category.map(())
-//   })
-// }
+const getData = (input) => {
+  console.log("getData -> input", input);
 
-const theme = [
-  "#ac58e5",
-  "#E0488B",
-  "#9fd0cb",
-  "#e0d33a",
-  "#7566ff",
-  "#533f82",
-  "#7a255d",
-  "#365350",
-  "#a19a11",
-  "#3f4482",
-];
+  let output = [];
 
-const frameProps = {
-  lines: data,
-  size: [, 400],
-  margin: { left: 100, bottom: 90, right: 100, top: 40 },
-  xAccessor: "year",
-  yAccessor: "amount",
-  yExtent: [0],
-  lineStyle: (d, i) => ({
-    stroke: theme[i],
-    strokeWidth: 3,
-  }),
-  title: <text textAnchor="middle">Title</text>,
-  axes: [
-    {
-      orient: "left",
-      label: "Y",
-      tickFormat: function (e) {
-        return e / 1e3 + "k";
-      },
-    },
-    {
-      orient: "bottom",
-      label: { name: "Year", locationDistance: 55 },
-      ticks: 3 - 1, // TODO: Length - 1
-    },
-  ],
+  const vehicles = Object.keys(input);
+
+  vehicles.forEach((vehicle, vehicleIndex) => {
+    let data = [];
+    input[vehicle].forEach((value, valueIndex) => {
+      data.push({ x: exampleData["Year"][valueIndex], y: value });
+    });
+    output.push({
+      id: vehicles[vehicleIndex],
+      data,
+    });
+  });
+
+  console.log(output);
+
+  return output;
 };
 
-export default ({ data = exampleData, ...props }) => {
+export default ({
+  data = [
+    { title: "Bilbestand", data: getData(exampleData["Bilbestand"]) },
+    { title: "Nybilsalg", data: getData(exampleData["Nybilsalg"]) },
+    { title: "CO2", data: getData(exampleData["CO2"]) },
+  ],
+  ...props
+}) => {
   return (
     <div {...props}>
       <Title>Utregninger</Title>
-
-      <ResponsiveXYFrame responsiveWidth={true} {...frameProps} />
+      {data &&
+        data.map((d, index) => {
+          return (
+            <div style={{ width: "100%", height: 400 }} key={`graph-${index}`}>
+              <ResponsiveLine
+                // data={example}
+                data={d.data}
+                margin={{ top: 50, right: 110, bottom: 50, left: 70 }}
+                xScale={{ type: "point" }}
+                yScale={{
+                  type: "linear",
+                  min: "auto",
+                  max: "auto",
+                  // stacked: true,
+                  reverse: false,
+                }}
+                axisTop={null}
+                axisRight={null}
+                axisBottom={{
+                  orient: "bottom",
+                  tickSize: 5,
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  legend: "År",
+                  legendOffset: 40,
+                  legendPosition: "middle",
+                }}
+                axisLeft={{
+                  orient: "left",
+                  tickSize: 5,
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  legend: d.title,
+                  legendOffset: -60,
+                  legendPosition: "middle",
+                }}
+                colors={{ scheme: "nivo" }}
+                pointSize={10}
+                pointColor={{ theme: "background" }}
+                pointBorderWidth={2}
+                pointBorderColor={{ from: "serieColor" }}
+                pointLabel="y"
+                pointLabelYOffset={-12}
+                useMesh={true}
+                legends={[
+                  {
+                    anchor: "bottom-right",
+                    direction: "column",
+                    justify: false,
+                    translateX: 100,
+                    translateY: 0,
+                    itemsSpacing: 0,
+                    itemDirection: "left-to-right",
+                    itemWidth: 80,
+                    itemHeight: 20,
+                    itemOpacity: 0.75,
+                    symbolSize: 12,
+                    symbolShape: "circle",
+                    symbolBorderColor: "rgba(0, 0, 0, .5)",
+                    effects: [
+                      {
+                        on: "hover",
+                        style: {
+                          itemBackground: "rgba(0, 0, 0, .03)",
+                          itemOpacity: 1,
+                        },
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </div>
+          );
+        })}
     </div>
   );
 };

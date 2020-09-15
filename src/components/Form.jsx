@@ -141,11 +141,11 @@ export default (props) => {
           </Button>
         </div>
 
-        <Title>Data</Title>
+        {/* <Title>Data</Title>
         <pre className="mt-3">{JSON.stringify(data, 0, 2)}</pre>
 
         <Title>Tiltak</Title>
-        <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre>
+        <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre> */}
       </Form>
     </div>
   );
