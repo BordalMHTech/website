@@ -8,7 +8,12 @@ import { ResponsiveLine } from "@nivo/line";
 // https://github.com/plouc/nivo/issues/884
 
 const getData = (input) => {
-  console.log("getData -> input", input);
+  const colors = {
+    El: "#23CE6B",
+    Fossil: "#566363",
+    Hybrid: "#F06449",
+    Hydrogen: "#5C80BC",
+  };
 
   let output = [];
 
@@ -21,6 +26,7 @@ const getData = (input) => {
     });
     output.push({
       id: vehicles[vehicleIndex],
+      color: colors[vehicle],
       data,
     });
   });
@@ -32,9 +38,17 @@ const getData = (input) => {
 
 export default ({
   data = [
-    { title: "Bilbestand", data: getData(exampleData["Bilbestand"]) },
-    { title: "Nybilsalg", data: getData(exampleData["Nybilsalg"]) },
-    { title: "CO2", data: getData(exampleData["CO2"]) },
+    {
+      title: "Bilbestand",
+      unit: "[biler]",
+      data: getData(exampleData["Bilbestand"]),
+    },
+    {
+      title: "Nybilsalg",
+      unit: "[biler]",
+      data: getData(exampleData["Nybilsalg"]),
+    },
+    { title: "CO2", unit: "[tonn]", data: getData(exampleData["CO2"]) },
   ],
   ...props
 }) => {
@@ -44,17 +58,27 @@ export default ({
       {data &&
         data.map((d, index) => {
           return (
-            <div style={{ width: "100%", height: 400 }} key={`graph-${index}`}>
+            <div
+              className="mt-3"
+              style={{ width: "100%", height: 400 }}
+              key={`graph-${index}`}
+            >
+              <div style={{ height: 0 }}>
+                <h5
+                  // className="text-center"
+                  style={{ position: "relative", top: 10, left: 70 }}
+                >
+                  {d.title}
+                </h5>
+              </div>
               <ResponsiveLine
-                // data={example}
                 data={d.data}
-                margin={{ top: 50, right: 110, bottom: 50, left: 70 }}
+                margin={{ top: 50, right: 110, bottom: 60, left: 70 }}
                 xScale={{ type: "point" }}
                 yScale={{
                   type: "linear",
                   min: "auto",
                   max: "auto",
-                  // stacked: true,
                   reverse: false,
                 }}
                 axisTop={null}
@@ -63,21 +87,21 @@ export default ({
                   orient: "bottom",
                   tickSize: 5,
                   tickPadding: 5,
-                  tickRotation: 0,
+                  tickRotation: 45,
                   legend: "År",
-                  legendOffset: 40,
+                  legendOffset: 50,
                   legendPosition: "middle",
                 }}
                 axisLeft={{
                   orient: "left",
                   tickSize: 5,
                   tickPadding: 5,
-                  tickRotation: 0,
-                  legend: d.title,
+                  tickRotation: 45,
+                  legend: `${d.title}${d.unit && ` ${d.unit}`}`,
                   legendOffset: -60,
                   legendPosition: "middle",
                 }}
-                colors={{ scheme: "nivo" }}
+                colors={(e) => e["color"]}
                 pointSize={10}
                 pointColor={{ theme: "background" }}
                 pointBorderWidth={2}

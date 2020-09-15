@@ -74,12 +74,31 @@ export default (props) => {
           </Col>
         </Row>
 
-        <Title
-          append={
+        <div className="mb-4">
+          <span>Tiltak</span>
+          <hr className="mt-1 mb-4" />
+          <div className="text-center">
+            {policies.map((policy, index) => (
+              <Form.Check
+                key={`policy-${policy.id}-${index}`}
+                className="mb-3 unselectable"
+                custom
+                inline
+                type="switch"
+                label={policy.label}
+                checked={policy.checked}
+                onChange={(e) => {
+                  handlePolicyChange(index, e.target.checked);
+                }}
+                id={policy.id}
+              />
+            ))}
+          </div>
+          <div className="mt-1 w-100 d-flex">
             <Button
               variant="light"
               size="lg"
-              className="px-2 pb-1 py-0 mb-1 border"
+              className="px-2 pb-1 py-0 mb-1 border mx-auto"
               type="button"
               onClick={() => resetPolicies()}
             >
@@ -88,27 +107,7 @@ export default (props) => {
                 Tilbakestill <span className="d-none d-sm-inline">tiltak</span>
               </small>
             </Button>
-          }
-        >
-          Tiltak
-        </Title>
-
-        <div className="mb-3">
-          {policies.map((policy, index) => (
-            <Form.Check
-              key={`policy-${policy.id}-${index}`}
-              className="mb-3 unselectable"
-              custom
-              inline
-              type="switch"
-              label={policy.label}
-              checked={policy.checked}
-              onChange={(e) => {
-                handlePolicyChange(index, e.target.checked);
-              }}
-              id={policy.id}
-            />
-          ))}
+          </div>
         </div>
 
         <Row>
@@ -125,6 +124,7 @@ export default (props) => {
                   <Form.Control
                     type="number"
                     name={percentage.id}
+                    defaultValue={percentage.value}
                     ref={register({ required: true })}
                   />
                   <InputGroup.Append>
