@@ -6,10 +6,10 @@ import defaultPolicies from "data/policies";
 import defaultPercentages from "data/percentages";
 import municipalities from "data/municipalities";
 import vehicles from "data/vehicles";
-import Title from "components/Title";
+import Feedback from "components/Feedback";
 
 export default (props) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
 
   const [policies, setPolicies] = useState(_.cloneDeep(defaultPolicies));
   const [percentages] = useState(defaultPercentages);
@@ -33,7 +33,7 @@ export default (props) => {
 
   return (
     <div {...props}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form noValidate onSubmit={handleSubmit(onSubmit)}>
         <Row>
           <Col xs="12" sm="6">
             <Form.Group>
@@ -43,6 +43,7 @@ export default (props) => {
                 custom
                 ref={register({ required: true })}
                 name="municipality"
+                isInvalid={errors["municipality"]}
               >
                 {municipalities.map((municipality, index) => (
                   <option
@@ -53,6 +54,9 @@ export default (props) => {
                   </option>
                 ))}
               </Form.Control>
+              <Feedback>
+                {errors["municipality"] && `Én kommune må velges`}
+              </Feedback>
             </Form.Group>
           </Col>{" "}
           <Col xs="12" sm="6">
@@ -63,6 +67,7 @@ export default (props) => {
                 custom
                 ref={register({ required: true })}
                 name="vehicle"
+                isInvalid={errors["vehicle"]}
               >
                 {vehicles.map((vehicle, index) => (
                   <option key={`vehicle-${vehicle}-${index}`} value={vehicle}>
@@ -70,6 +75,9 @@ export default (props) => {
                   </option>
                 ))}
               </Form.Control>
+              <Feedback>
+                {errors["vehicle"] && `Én eller flere typer kjøretøy må velges`}
+              </Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -125,12 +133,21 @@ export default (props) => {
                     type="number"
                     name={percentage.id}
                     defaultValue={percentage.value}
-                    ref={register({ required: true })}
+                    isInvalid={errors[percentage.id]}
+                    ref={register({
+                      required: true,
+                      min: percentage.min,
+                      max: percentage.max,
+                    })}
                   />
                   <InputGroup.Append>
                     <InputGroup.Text>%</InputGroup.Text>
                   </InputGroup.Append>
                 </InputGroup>
+                <Feedback>
+                  {errors[percentage.id] &&
+                    `Må være et tall mellom ${percentage.min} og ${percentage.max}`}
+                </Feedback>
               </Form.Group>
             </Col>
           ))}
