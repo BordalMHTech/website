@@ -1,1 +1,7 @@
-export default ["", "El", "Hydrogen", "Fossil", "Hybrid"];
+export default [
+  // "",
+  "El",
+  "Hydrogen",
+  "Fossil",
+  "Hybrid",
+];

@@ -3,18 +3,18 @@ import Title from "components/Title";
 import exampleData from "data/example.json";
 import "styles/semiotic.css";
 
-import { ResponsiveLine } from "@nivo/line";
+import { Line, ResponsiveLine } from "@nivo/line";
 // Gives depreciation warning, but fixes are hopefully on the way:
 // https://github.com/plouc/nivo/issues/884
 
-const getData = (input) => {
-  const colors = {
-    El: "#23CE6B",
-    Fossil: "#566363",
-    Hybrid: "#F06449",
-    Hydrogen: "#5C80BC",
-  };
+const colors = {
+  El: "#23CE6B",
+  Fossil: "#566363",
+  Hybrid: "#F06449",
+  Hydrogen: "#5C80BC",
+};
 
+const getData = (input) => {
   let output = [];
 
   const vehicles = Object.keys(input);
@@ -38,43 +38,80 @@ export default ({ data, ...props }) => {
   data = data && [
     {
       title: "Bilbestand",
-      unit: "[biler]",
+      unit: "biler",
       data: getData(data["Bilbestand"]),
     },
     {
       title: "Nybilsalg",
-      unit: "[biler]",
+      unit: "biler",
       data: getData(data["Nybilsalg"]),
     },
-    { title: "CO2", unit: "[tonn]", data: getData(data["CO2"]) },
+    { title: "CO2", unit: "tonn", data: getData(data["CO2"]) },
   ];
 
   if (!data) {
     return null;
   }
 
+  const Legend = (input) => {
+    console.log(input.data.data);
+
+    const vehicles =
+      input.data.data && input.data.data.map((vehicle) => vehicle.id);
+
+    return (
+      <div
+        className="d-flex flex-wrap justify-content-center"
+        style={{ position: "relative", bottom: 20 }}
+      >
+        {vehicles.map((vehicle, index) => {
+          return (
+            <div className={`d-flex align-items-center mx-2`}>
+              <div
+                style={{
+                  backgroundColor: colors[vehicle],
+                  width: 9,
+                  height: 9,
+                  borderRadius: "100%",
+                  position: "relative",
+                  top: 1,
+                }}
+              ></div>
+              <small className="ml-1">{vehicle}</small>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div {...props}>
-      <Title>Utregninger</Title>
+      <Title>Resultat</Title>
       {data &&
         data.map((d, index) => {
           return (
             <div
-              className="mt-3"
-              style={{ width: "100%", height: 400 }}
+              className="mt-3 pb-3"
+              style={{ width: "100%", height: 400, maxHeight: "50vh" }}
               key={`graph-${index}`}
             >
               <div style={{ height: 0 }}>
-                <h5
-                  // className="text-center"
-                  style={{ position: "relative", top: 10, left: 70 }}
+                <div
+                  className="d-flex align-items-center"
+                  style={{ position: "relative", top: 20, left: 38 }}
                 >
-                  {d.title}
-                </h5>
+                  <h6 className="text-center my-0 py-0">{d.title}</h6>
+                  <span className="ml-1 text-muted"> per år</span>
+                  <span className="ml-1 text-muted">[{d.unit}]</span>
+                </div>
               </div>
               <ResponsiveLine
+                // animate={false} // Uncomment to remove componentWillReceiveProps-warning
+                motionStiffness={110}
+                motionDamping={17}
                 data={d.data}
-                margin={{ top: 50, right: 110, bottom: 60, left: 70 }}
+                margin={{ top: 50, right: 5, bottom: 60, left: 40 }}
                 xScale={{ type: "point" }}
                 yScale={{
                   type: "linear",
@@ -88,55 +125,64 @@ export default ({ data, ...props }) => {
                   orient: "bottom",
                   tickSize: 5,
                   tickPadding: 5,
-                  tickRotation: 45,
-                  legend: "År",
-                  legendOffset: 50,
-                  legendPosition: "middle",
+                  tickRotation: -45,
+                  // legend: "År",
+                  // legendOffset: 50,
+                  // legendPosition: "middle",
                 }}
                 axisLeft={{
                   orient: "left",
                   tickSize: 5,
                   tickPadding: 5,
-                  tickRotation: 45,
-                  legend: `${d.title}${d.unit && ` ${d.unit}`}`,
-                  legendOffset: -60,
+                  tickRotation: -45,
+                  // legend: `${d.title}${d.unit && ` ${d.unit}`}`,
+                  legendOffset: -45,
                   legendPosition: "middle",
                 }}
                 colors={(e) => e["color"]}
-                pointSize={10}
-                pointColor={{ theme: "background" }}
-                pointBorderWidth={2}
-                pointBorderColor={{ from: "serieColor" }}
-                pointLabel="y"
-                pointLabelYOffset={-12}
+                enablePoints={false}
+                enableArea={true}
+                areaOpacity={0.05}
+                curve="natural"
+                // pointSize={1}
+                // pointColor={{ theme: "background" }}
+                // pointBorderWidth={2}
+                // pointBorderColor={{ from: "serieColor" }}
+                // pointLabel={d.unit}
+                // pointLabelYOffset={-12}
                 useMesh={true}
-                legends={[
-                  {
-                    anchor: "bottom-right",
-                    direction: "column",
-                    justify: false,
-                    translateX: 100,
-                    translateY: 0,
-                    itemsSpacing: 0,
-                    itemDirection: "left-to-right",
-                    itemWidth: 80,
-                    itemHeight: 20,
-                    itemOpacity: 0.75,
-                    symbolSize: 12,
-                    symbolShape: "circle",
-                    symbolBorderColor: "rgba(0, 0, 0, .5)",
-                    effects: [
-                      {
-                        on: "hover",
-                        style: {
-                          itemBackground: "rgba(0, 0, 0, .03)",
-                          itemOpacity: 1,
-                        },
-                      },
-                    ],
-                  },
-                ]}
+                // legends={
+                //   index === 0
+                //     ? [
+                //         {
+                //           anchor: "top",
+                //           direction: "column",
+                //           justify: false,
+                //           translateX: 45,
+                //           // translateY: -100,
+                //           itemsSpacing: 0,
+                //           itemDirection: "left-to-right",
+                //           itemWidth: 80,
+                //           itemHeight: 20,
+                //           itemOpacity: 1,
+                //           symbolSize: 12,
+                //           symbolShape: "circle",
+                //           symbolBorderColor: "rgba(0, 0, 0, .5)",
+                //           // effects: [
+                //           //   {
+                //           //     on: "hover",
+                //           //     style: {
+                //           //       itemBackground: "rgba(0, 0, 0, .03)",
+                //           //       itemOpacity: 1,
+                //           //     },
+                //           //   },
+                //           // ],
+                //         },
+                //       ]
+                //     : []
+                // }
               />
+              <Legend data={d} />
             </div>
           );
         })}
