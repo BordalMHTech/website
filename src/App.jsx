@@ -4,7 +4,6 @@ import "styles/bootstrap.scss";
 import Form from "components/Form";
 import Background from "components/Background";
 import Hero from "components/Hero";
-import Visualization from "components/Visualization";
 import About from "components/About";
 import Footer from "components/Footer";
 import { Container, Card } from "react-bootstrap";
@@ -19,7 +18,6 @@ export default () => {
           <Card.Body>
             <Hero />
             <Form />
-            <Visualization className="mb-3" />
             <About className="mb-3" />
             <Footer />
           </Card.Body>

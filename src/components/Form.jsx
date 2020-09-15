@@ -7,6 +7,8 @@ import defaultPercentages from "data/percentages";
 import municipalities from "data/municipalities";
 import vehicles from "data/vehicles";
 import Feedback from "components/Feedback";
+import Visualization from "components/Visualization";
+import calculate from "functions/api.js";
 
 export default (props) => {
   const { register, handleSubmit, errors } = useForm();
@@ -25,10 +27,10 @@ export default (props) => {
     setPolicies(_.cloneDeep(defaultPolicies));
   };
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState();
 
   const onSubmit = (values) => {
-    setData(values);
+    setData(calculate(values));
   };
 
   return (
@@ -158,11 +160,14 @@ export default (props) => {
           </Button>
         </div>
 
-        {/* <Title>Data</Title>
+        <Visualization data={data} className="mb-3" />
+
+        {/* Debugging: */}
+        <h5>Data</h5>
         <pre className="mt-3">{JSON.stringify(data, 0, 2)}</pre>
 
-        <Title>Tiltak</Title>
-        <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre> */}
+        <h5>Tiltak</h5>
+        <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre>
       </Form>
     </div>
   );

@@ -36,22 +36,23 @@ const getData = (input) => {
   return output;
 };
 
-export default ({
-  data = [
+export default ({ data, ...props }) => {
+  data = data && [
     {
       title: "Bilbestand",
       unit: "[biler]",
-      data: getData(exampleData["Bilbestand"]),
+      data: getData(data["Bilbestand"]),
     },
     {
       title: "Nybilsalg",
       unit: "[biler]",
-      data: getData(exampleData["Nybilsalg"]),
+      data: getData(data["Nybilsalg"]),
     },
-    { title: "CO2", unit: "[tonn]", data: getData(exampleData["CO2"]) },
-  ],
-  ...props
-}) => {
+    { title: "CO2", unit: "[tonn]", data: getData(data["CO2"]) },
+  ];
+
+  console.log(data);
+
   return (
     <div {...props}>
       <Title>Utregninger</Title>
