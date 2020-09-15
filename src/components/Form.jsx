@@ -163,11 +163,11 @@ export default (props) => {
         <Visualization data={data} className="mb-3" />
 
         {/* Debugging: */}
-        <h5>Data</h5>
+        {/* <h5>Data</h5>
         <pre className="mt-3">{JSON.stringify(data, 0, 2)}</pre>
 
         <h5>Tiltak</h5>
-        <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre>
+        <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre> */}
       </Form>
     </div>
   );
