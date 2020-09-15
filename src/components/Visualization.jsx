@@ -56,7 +56,7 @@ export default ({ data, ...props }) => {
     return null;
   }
 
-  const FinalTable = () => {
+  const FinalTable = ({ ...props }) => {
     let vehicles = [];
 
     data.forEach((d) => {
@@ -68,7 +68,7 @@ export default ({ data, ...props }) => {
     });
 
     return (
-      <Table striped bordered hover size="sm">
+      <Table striped bordered hover size="sm" {...props}>
         <thead>
           <tr>
             <th>Kjøretøy</th>
@@ -203,7 +203,11 @@ export default ({ data, ...props }) => {
   return (
     <div {...props}>
       <Title>Resultat</Title>
-      <FinalTable />
+      <FinalTable className="d-none d-sm-table w-100" style={{}} />
+      <FinalTable
+        className="d-table d-sm-none w-100"
+        style={{ fontSize: 9.5 }}
+      />
       <Graphs />
     </div>
   );
