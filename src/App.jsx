@@ -21,9 +21,9 @@ export default () => {
             <Form />
             <Visualization className="mb-3" />
             <About className="mb-3" />
+            <Footer />
           </Card.Body>
         </Card>
-        <Footer />
       </Container>
     </>
   );

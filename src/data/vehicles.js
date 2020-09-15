@@ -1,1 +1,1 @@
-export default ["", "Elbil", "Trehjulsykkel", "Gressklipper"];
+export default ["", "El", "Hydrogen", "Fossil", "Hybrid"];
