@@ -3,7 +3,6 @@ import Title from "components/Title";
 import exampleData from "data/example.json";
 import "styles/semiotic.css";
 import { Button, ButtonGroup, Table } from "react-bootstrap";
-// import _ from "lodash";
 
 import { ResponsiveLine } from "@nivo/line";
 // Gives depreciation warning, but fixes are hopefully on the way:
@@ -88,7 +87,8 @@ export default ({ data, ...props }) => {
             const getValue = (i) => {
               const d = data[i]["data"];
               const dIndex = d.findIndex((e) => e.id === vehicle);
-              const value = d[dIndex]["data"][0]["y"];
+              const value =
+                d[dIndex]["data"][d[dIndex]["data"].length - 1]["y"];
               return value;
             };
             return (
@@ -177,11 +177,19 @@ export default ({ data, ...props }) => {
               aria-label="Percent/total toggle"
               style={{ zIndex: 1 }}
             >
-              <Button variant="light" className="border">
+              <Button
+                variant="light"
+                className="border"
+                onClick={() => setPercent(true)}
+              >
                 <span className="d-none d-sm-inline">Prosent</span>
                 <span className="d-inline d-sm-none">%</span>
               </Button>
-              <Button variant="light" className="border">
+              <Button
+                variant="light"
+                className="border"
+                onClick={() => setPercent(false)}
+              >
                 <span className="d-none d-sm-inline">Antall</span>
                 <span className="d-inline d-sm-none">#</span>
               </Button>
@@ -239,7 +247,10 @@ export default ({ data, ...props }) => {
     <div {...props}>
       <Title>Resultat</Title>
       {/* Big screen table */}
-      <FinalTable className="d-none d-sm-table w-100" style={{}} />
+      <FinalTable
+        className="d-none d-sm-table w-100"
+        style={{ fontSize: 14 }}
+      />
       {/* Small screen table */}
       <FinalTable
         className="d-table d-sm-none w-100"

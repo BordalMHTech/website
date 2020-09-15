@@ -15,7 +15,7 @@ export default (props) => {
         <i className="fal fa-copyright fa-flip-horizontal" />
         <span className="">{`${new Date().getFullYear()}`}</span>
         <span className="mx-1">{`©`}</span>
-        <a style={{ fontWeight: 1000 }} href="http://www.mhtech.no/">
+        <a style={{ fontWeight: "bold" }} href="http://www.mhtech.no/">
           MHTech
         </a>
       </div>

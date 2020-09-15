@@ -155,7 +155,7 @@ export default (props) => {
           ))}
         </Row>
         <div className="w-100 d-flex">
-          <Button className="mt-3 mx-auto border border-dark" type="submit">
+          <Button className="mt-3 mx-auto" type="submit">
             Kalkuler
           </Button>
         </div>
