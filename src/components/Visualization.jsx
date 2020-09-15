@@ -31,8 +31,6 @@ const getData = (input) => {
     });
   });
 
-  console.log(output);
-
   return output;
 };
 
@@ -51,7 +49,9 @@ export default ({ data, ...props }) => {
     { title: "CO2", unit: "[tonn]", data: getData(data["CO2"]) },
   ];
 
-  console.log(data);
+  if (!data) {
+    return null;
+  }
 
   return (
     <div {...props}>
