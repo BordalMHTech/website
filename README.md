@@ -2,6 +2,8 @@
 
 A calculator for municipalities to estimate environmental consequences of policies regarding vehicles.
 
+![Screenshot](src/images/example.png "Screenshot")
+
 ## 📑 Table of Contents <!-- omit in toc -->
 
 - [🎓 Prerequisites](#-prerequisites)
@@ -59,13 +61,13 @@ A calculator for municipalities to estimate environmental consequences of polici
 
    Remember to follow instructions to fix vulnerabilities (if any) before deployment in production.
 
-2. Start the frontend
+1. Start the frontend
 
    ```console
    npm start
    ```
 
-3. To commit, push and pull you'll need to [enter your username and email for git](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup). Check out this [guide](https://code.visualstudio.com/docs/editor/github) to learn more about how GitHub is used in VSCode.
+1. To commit, push and pull you'll need to [enter your username and email for git](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup). Check out this [guide](https://code.visualstudio.com/docs/editor/github) to learn more about how GitHub is used in VSCode.
 
 You should now be ready for development and local testing. If not, contact your senior(s) or any of the contributors. Open your browser and go to http://localhost:3000/ or http://x.x.x.x:3000/ (where x.x.x.x is your local IP address).
 
