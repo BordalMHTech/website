@@ -42,7 +42,7 @@ A calculator for municipalities to estimate environmental consequences of polici
    1. Paste
 
       ```console
-      https://github.com/VidunderGunder/digital-coating-report-2.0-frontend.git
+      https://github.com/MHTECHSoftware/frontEndSkvirr
       ```
 
    1. Select a place to store the project
