@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Title from "components/Title";
 import exampleData from "data/example.json";
 import "styles/semiotic.css";
-import { Button, ButtonGroup, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Row, Table } from "react-bootstrap";
 import _ from "lodash";
 
 import { ResponsiveLine } from "@nivo/line";
@@ -181,101 +181,107 @@ export default ({ data, ...props }) => {
       // _____________________________________________________
 
       return (
-        <div
-          className="mt-3 pb-3"
-          style={{ width: "100%", height: 400, maxHeight: "50vh" }}
-        >
-          {/* <pre>{JSON.stringify(dPercent, 0, 2)}</pre> */}
+        <Col xs="12" lg="6">
           <div
-            className="d-flex w-100 justify-content-between"
-            style={{ position: "relative", top: 40 }}
+            className="pb-5"
+            style={{ width: "100%", height: 350, maxHeight: "50vh" }}
           >
+            {/* <pre>{JSON.stringify(dPercent, 0, 2)}</pre> */}
             <div
-              className="d-flex align-items-center w-100"
-              style={{ position: "relative", left: 38 }}
+              className="d-flex w-100 justify-content-between"
+              style={{ position: "relative", top: 10 }}
             >
-              <h6 className="text-center my-0 py-0">{d.title}</h6>
-              {/* Big screen */}
-              <span
-                className="d-none d-sm-inline"
-                style={{ position: "relative", top: 1 }}
+              <div
+                className="d-flex align-items-center w-100"
+                style={{ position: "relative", left: 38 }}
               >
-                <span className="ml-1 text-muted"> per år</span>
-                <span className="ml-1 text-muted">
-                  [{percent ? "%" : d["unit"]}]
+                <h6 className="text-center my-0 py-0">{d.title}</h6>
+                {/* Big screen */}
+                <span
+                  className="d-none d-sm-inline"
+                  style={{ position: "relative", top: 1 }}
+                >
+                  <span className="ml-1 text-muted"> per år</span>
+                  <span className="ml-1 text-muted">
+                    [{percent ? "%" : d["unit"]}]
+                  </span>
                 </span>
-              </span>
-              {/* Small screen */}
-              <span
-                className="d-inline d-sm-none"
-                style={{ position: "relative", top: 1 }}
+                {/* Small screen */}
+                <span
+                  className="d-inline d-sm-none"
+                  style={{ position: "relative", top: 1 }}
+                >
+                  <span className="text-muted">/år</span>
+                </span>
+              </div>
+              <ButtonGroup
+                className="ml-3"
+                size="sm"
+                aria-label="Percent/total toggle"
+                style={{ zIndex: 1 }}
               >
-                <span className="text-muted">/år</span>
-              </span>
+                <Button
+                  variant="light"
+                  className="border"
+                  onClick={() => setPercent(true)}
+                >
+                  <span className="d-none d-sm-inline">Prosent</span>
+                  <span className="d-inline d-sm-none">%</span>
+                </Button>
+                <Button
+                  variant="light"
+                  className="border"
+                  onClick={() => setPercent(false)}
+                >
+                  <span className="d-none d-sm-inline">Antall</span>
+                  <span className="d-inline d-sm-none">#</span>
+                </Button>
+              </ButtonGroup>
             </div>
-            <ButtonGroup
-              className="ml-3"
-              size="sm"
-              aria-label="Percent/total toggle"
-              style={{ zIndex: 1 }}
-            >
-              <Button
-                variant="light"
-                className="border"
-                onClick={() => setPercent(true)}
-              >
-                <span className="d-none d-sm-inline">Prosent</span>
-                <span className="d-inline d-sm-none">%</span>
-              </Button>
-              <Button
-                variant="light"
-                className="border"
-                onClick={() => setPercent(false)}
-              >
-                <span className="d-none d-sm-inline">Antall</span>
-                <span className="d-inline d-sm-none">#</span>
-              </Button>
-            </ButtonGroup>
+            <ResponsiveLine
+              motionStiffness={110}
+              motionDamping={17}
+              data={percent ? dPercent.data : d.data}
+              margin={{ top: 20, right: 5, bottom: 60, left: 40 }}
+              xScale={{ type: "point" }}
+              yScale={{
+                type: "linear",
+                min: "auto",
+                max: "auto",
+                reverse: false,
+              }}
+              yFormat={
+                percent ? (y) => `${Math.floor(y * 100 + 0.5)}%` : (y) => y
+              }
+              axisTop={null}
+              axisRight={null}
+              axisBottom={{
+                orient: "bottom",
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: -45,
+              }}
+              axisLeft={{
+                format: percent
+                  ? (y) => `${Math.floor(y * 100 + 0.5)}%`
+                  : (y) => y,
+                orient: "left",
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: -45,
+                legendOffset: -45,
+                legendPosition: "middle",
+              }}
+              colors={(e) => e["color"]}
+              enablePoints={false}
+              enableArea={true}
+              areaOpacity={0.05}
+              curve="natural"
+              useMesh={true}
+            />
+            <Legend data={d} />
           </div>
-          <ResponsiveLine
-            motionStiffness={110}
-            motionDamping={17}
-            data={percent ? dPercent.data : d.data}
-            margin={{ top: 50, right: 5, bottom: 60, left: 40 }}
-            xScale={{ type: "point" }}
-            yScale={{
-              type: "linear",
-              min: "auto",
-              max: "auto",
-              reverse: false,
-            }}
-            yFormat={percent ? (y) => `${Math.floor(y * 100)}%` : (y) => y}
-            axisTop={null}
-            axisRight={null}
-            axisBottom={{
-              orient: "bottom",
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: -45,
-            }}
-            axisLeft={{
-              format: percent ? (y) => `${Math.floor(y * 100)}%` : (y) => y,
-              orient: "left",
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: -45,
-              legendOffset: -45,
-              legendPosition: "middle",
-            }}
-            colors={(e) => e["color"]}
-            enablePoints={false}
-            enableArea={true}
-            areaOpacity={0.05}
-            curve="natural"
-            useMesh={true}
-          />
-          <Legend data={d} />
-        </div>
+        </Col>
       );
     };
 
@@ -291,16 +297,20 @@ export default ({ data, ...props }) => {
     <div {...props}>
       <Title>Resultat</Title>
       {/* Big screen table */}
-      <FinalTable
-        className="d-none d-sm-table w-100"
-        style={{ fontSize: 14 }}
-      />
-      {/* Small screen table */}
-      <FinalTable
-        className="d-table d-sm-none w-100"
-        style={{ fontSize: 9.5 }}
-      />
-      <Graphs />
+      <Row className="align-items-center">
+        <Col xs="12" lg="6">
+          <FinalTable
+            className="d-none d-sm-table w-100"
+            style={{ fontSize: 14 }}
+          />
+          {/* Small screen table */}
+          <FinalTable
+            className="d-table d-sm-none w-100"
+            style={{ fontSize: 9.5 }}
+          />
+        </Col>
+        <Graphs />
+      </Row>
     </div>
   );
 };
