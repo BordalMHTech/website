@@ -17,7 +17,7 @@ export default () => {
         <Card className="my-3 shadow bg-light">
           <Card.Body>
             <Hero />
-            <Form />
+            <Form className="mb-4" />
             <About className="mb-3" />
             <Footer />
           </Card.Body>

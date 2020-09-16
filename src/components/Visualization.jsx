@@ -3,6 +3,7 @@ import Title from "components/Title";
 import exampleData from "data/example.json";
 import "styles/semiotic.css";
 import { Button, ButtonGroup, Table } from "react-bootstrap";
+import _ from "lodash";
 
 import { ResponsiveLine } from "@nivo/line";
 // Gives depreciation warning, but fixes are hopefully on the way:
@@ -140,12 +141,51 @@ export default ({ data, ...props }) => {
     };
 
     const Graph = ({ d, index }) => {
+      // Percentage calculations
+      // _____________________________________________________
       const [percent, setPercent] = useState(false);
+      let dPercent = {};
+      let years = [];
+      // let vehicles = [];
+
+      d.data.forEach((vehicle) => {
+        // vehicles.push(vehicle.id);
+        vehicle.data.forEach((pair) => {
+          years.push(pair.x);
+        });
+      });
+
+      if (percent) {
+        // Find totals
+        let totals = {};
+        years.forEach((year) => {
+          let total = 0;
+
+          d.data.forEach((vehicle) => {
+            total +=
+              vehicle.data[vehicle.data.findIndex((pair) => pair.x === year)].y;
+          });
+          totals[year] = total;
+        });
+
+        // Fill dPercent with y-values as percentages
+        dPercent = _.cloneDeep(d);
+        d.data.forEach((vehicle, vehicleIndex) => {
+          vehicle.data.forEach((pair, pairIndex) => {
+            // console.log(pair.y / totals[pair.x]);
+            dPercent.data[vehicleIndex].data[pairIndex].y =
+              pair.y / totals[pair.x];
+          });
+        });
+      }
+      // _____________________________________________________
+
       return (
         <div
           className="mt-3 pb-3"
           style={{ width: "100%", height: 400, maxHeight: "50vh" }}
         >
+          {/* <pre>{JSON.stringify(dPercent, 0, 2)}</pre> */}
           <div
             className="d-flex w-100 justify-content-between"
             style={{ position: "relative", top: 40 }}
@@ -161,7 +201,9 @@ export default ({ data, ...props }) => {
                 style={{ position: "relative", top: 1 }}
               >
                 <span className="ml-1 text-muted"> per år</span>
-                <span className="ml-1 text-muted">[{d["unit"]}]</span>
+                <span className="ml-1 text-muted">
+                  [{percent ? "%" : d["unit"]}]
+                </span>
               </span>
               {/* Small screen */}
               <span
@@ -198,7 +240,7 @@ export default ({ data, ...props }) => {
           <ResponsiveLine
             motionStiffness={110}
             motionDamping={17}
-            data={d.data}
+            data={percent ? dPercent.data : d.data}
             margin={{ top: 50, right: 5, bottom: 60, left: 40 }}
             xScale={{ type: "point" }}
             yScale={{
@@ -207,6 +249,7 @@ export default ({ data, ...props }) => {
               max: "auto",
               reverse: false,
             }}
+            yFormat={percent ? (y) => `${Math.floor(y * 100)}%` : (y) => y}
             axisTop={null}
             axisRight={null}
             axisBottom={{
@@ -216,6 +259,7 @@ export default ({ data, ...props }) => {
               tickRotation: -45,
             }}
             axisLeft={{
+              format: percent ? (y) => `${Math.floor(y * 100)}%` : (y) => y,
               orient: "left",
               tickSize: 5,
               tickPadding: 5,
