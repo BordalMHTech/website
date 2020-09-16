@@ -28,7 +28,7 @@ A calculator for municipalities to estimate environmental consequences of polici
 1. Install [Node](https://nodejs.org/en/download/)
 1. Install [Git](https://git-scm.com/)
 1. [Create a GitHub user](https://github.com/join)
-1. Get access to the [repository](https://github.com/Andkleven/digital-coating-report-2.0) (will show 404 error if you do not have permission)
+1. Get access to the [repository](https://github.com/MHTECHSoftware/frontEndSkvirr) (will show 404 error if you do not have permission)
 1. Open VSCode
 1. Clone the repository
 
