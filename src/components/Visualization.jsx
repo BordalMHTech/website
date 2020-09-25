@@ -277,7 +277,7 @@ export default ({ data, ...props }) => {
               enablePoints={false}
               enableArea={true}
               areaOpacity={0.05}
-              curve="natural"
+              curve="monotoneX"
               useMesh={true}
             />
             <Legend data={d} />
