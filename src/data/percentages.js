@@ -1,6 +1,6 @@
 export default [
   {
-    id: "percentage1",
+    id: "renewablePercentage",
     label: "Andel fornybar energi",
     value: 0,
     min: 0,
@@ -8,7 +8,7 @@ export default [
     calculation: (x) => x,
   },
   {
-    id: "percentage2",
+    id: "hybridFossilePercentage",
     label: "Andel hybrid med fossilt",
     value: 0,
     min: 0,
@@ -16,12 +16,12 @@ export default [
     calculation: (x) => x,
   },
   {
-    id: "percentage3",
+    id: "degreeOfAttainment",
     label: "Oppnåelsesgrad",
     value: 0,
     min: 0,
     max: 100,
     calculation: (x) => x,
   },
-  { id: "percentage4", label: "Vekst", value: 0, calculation: (x) => x },
+  { id: "growth", label: "Vekst", value: 0, calculation: (x) => x },
 ];

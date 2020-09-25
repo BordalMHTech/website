@@ -38,6 +38,11 @@ const getData = (input) => {
 
 export default ({ data, ...props }) => {
   // const ogData = _.cloneDeep(data);
+
+  if (!data) {
+    return null;
+  }
+
   data = data && [
     {
       title: "Bilbestand",
@@ -51,10 +56,6 @@ export default ({ data, ...props }) => {
     },
     { title: "CO2", unit: "tonn", data: getData(data["CO2"]) },
   ];
-
-  if (!data) {
-    return null;
-  }
 
   const FinalTable = ({ ...props }) => {
     let vehicles = [];
