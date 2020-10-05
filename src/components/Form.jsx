@@ -13,9 +13,9 @@ import calculate from "functions/api.js";
 export default (props) => {
   const { register, handleSubmit, errors } = useForm();
 
+  const [vehicle, setVehicle] = useState("");
   const [policies, setPolicies] = useState(_.cloneDeep(defaultPolicies));
   const [percentages] = useState(defaultPercentages);
-
   const handlePolicyChange = (index, checked) => {
     setPolicies((policies) => {
       policies[index]["checked"] = checked;
@@ -70,10 +70,11 @@ export default (props) => {
                 ref={register({ required: true })}
                 name="vehicle"
                 isInvalid={errors["vehicle"]}
+                onChange={e => setVehicle(e.target.value)}
               >
                 {vehicles.map((vehicle, index) => (
-                  <option key={`vehicle-${vehicle}-${index}`} value={vehicle}>
-                    {vehicle}
+                  <option key={`vehicle-${vehicle}-${index}`} value={vehicle[0]} >
+                    {vehicle[1]}
                   </option>
                 ))}
               </Form.Control>
@@ -88,21 +89,25 @@ export default (props) => {
           <span>Tiltak</span>
           <hr className="mt-1 mb-4" />
           <div className="text-center">
-            {policies.map((policy, index) => (
-              <Form.Check
-                key={`policy-${policy.id}-${index}`}
-                className="mb-3 unselectable"
-                custom
-                inline
-                type="switch"
-                label={policy.label}
-                checked={policy.checked}
-                onChange={(e) => {
-                  handlePolicyChange(index, e.target.checked);
-                }}
-                id={policy.id}
-              />
-            ))}
+            {policies.map((policy, index) => {
+              if (policy.showButton.length === 4 || policy.showButton.includes(vehicle)) {
+                return <Form.Check
+                  key={`policy-${policy.id}-${index}`}
+                  className="mb-3 unselectable"
+                  custom
+                  inline
+                  type="switch"
+                  label={policy.label}
+                  checked={policy.checked}
+                  onChange={(e) => {
+                    handlePolicyChange(index, e.target.checked);
+                  }}
+                  id={policy.id}
+                />
+              } else {
+                return null
+              }
+            })}
           </div>
           <div className="mt-1 w-100 d-flex">
             <Button
@@ -168,7 +173,7 @@ export default (props) => {
 
         <h5>Tiltak</h5>
         <pre className="mt-3">{JSON.stringify(policies, 0, 2)}</pre> */}
-      </Form>
-    </div>
+      </Form >
+    </div >
   );
 };

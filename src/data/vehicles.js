@@ -1,7 +1,7 @@
 export default [
-  // "",
-  "El",
-  "Hydrogen",
-  "Fossil",
-  "Hybrid",
+  "",
+  ["Personbiler", "Personbiler"],
+  ["Varebiler", "Varebiler"],
+  ["letteLastebiler", "Lette lastebiler"],
+  ["tyngreLastebiler", "Tyngre lastebiler"],
 ];
