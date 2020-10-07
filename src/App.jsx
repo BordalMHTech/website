@@ -8,7 +8,6 @@ import About from "components/About";
 import Footer from "components/Footer";
 import { Container, Card } from "react-bootstrap";
 import traffic from "images/traffic.jpg";
-const Data = React.createContext();
 
 export default () => {
   return (
