@@ -1,6 +1,6 @@
 export default {
     "personbiler": {
-        "ntp": {
+        "ntpGoal": {
             "basis": 90,
             "moms": -25,
             "co2AvgiftDobling": 6,
@@ -9,7 +9,7 @@ export default {
             "nullLavuslippsone": 10,
             "veibruksavgiftFor0Utslipp": -10
         },
-        "bilvekst": {
+        "growthRate": {
             "basis": 4,
             "nullLavuslippsone": -2,
             "arealpolitikk": -2,
@@ -22,10 +22,10 @@ export default {
             "arealpolitikk": -5,
             "kollektivTransport": -10
         },
-        "per": 100,
+        "percentElRenewable": 100,
     },
     "varebiler": {
-        "ntp": {
+        "ntpGoal": {
             "basis": 50,
             "subsidier": 0,
             "teknologi": 0,
@@ -42,9 +42,9 @@ export default {
             "offentligeDedikerteLynladeplasser": 5,
             "kravFraVareier": 20,
         },
-        "bilvekst": 0,
+        "growthRate": 0,
         "vekstAvTellinger": 0,
-        "per": 100,
+        "percentElRenewable": 100,
     },
     "letteLastebiler": {
         "ntp": {
@@ -67,7 +67,7 @@ export default {
             "energistasjonerBiogass": 50,
             "kravFraVareier": 20
         },
-        "bilvekst": 0,
+        "growthRate": 0,
         "vekstAvTellinger": 0,
         "prosentElIFornybar": 75
     },
@@ -90,7 +90,7 @@ export default {
             "energistasjonerH2Biogass": 50,
             "kravFraVareier": 20
         },
-        "bilvekst": 0,
+        "growthRate": 0,
         "vekstAvTellinger": 0,
         "prosentTeknologiIFornybar": 50
     }

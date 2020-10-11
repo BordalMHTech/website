@@ -1,17 +1,24 @@
 export default [
   {
-    id: "ntp",
-    label: "NTP",
+    id: "ntpGoal",
+    label: "NTP mål",
     value: 0,
     showButton: ["varebiler", "personbiler"],
     calculation: (x) => x,
   },
   {
-    id: "bilvekst",
+    id: "growthRate",
     label: "Bil vekst",
     value: 0,
     showButton: ["varebiler", "personbiler", "letteLastebiler", "tyngreLastebiler"],
     calculation: (x) => x,
+  },
+  {
+    id: "percentElRenewable",
+    label: "Prosent El Fornybar",
+    value: 0,
+    showButton: ["varebiler", "personbiler", "letteLastebiler", "tyngreLastebiler"],
+    calculation: (x) => x
   },
   {
     id: "prosentElIFornybar",
@@ -34,11 +41,5 @@ export default [
     showButton: ["varebiler", "personbiler", "letteLastebiler", "tyngreLastebiler"],
     calculation: (x) => x
   },
-  {
-    id: "per",
-    label: "PER",
-    value: 0,
-    showButton: ["varebiler", "personbiler", "letteLastebiler", "tyngreLastebiler"],
-    calculation: (x) => x
-  }
+
 ];

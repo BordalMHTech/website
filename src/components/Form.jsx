@@ -25,17 +25,15 @@ export default (props) => {
   const onSubmit = (values) => {
     console.log(policies)
     // kalkulering om det er avhuking
-    // if (!advanced) {
-    //   let policiesDone = []
-    //   policies.forEach(policie => {
-    //     if (policie.checked) {
-    //       policiesDone.push(policie.id)
-    //     }
-    //   })
-    //   console.log(calculator(vehicle, policiesDone, Object.keys(formula[vehicle])))
-    // }
+    if (!advanced) {
+      setData(calculator(vehicle === "alle" ? vehiclesType : [vehicle], policies))
+      console.log(calculator(vehicle === "alle" ? vehiclesType : [vehicle], policies))
 
-    setData(calculate(values));
+    } else {
+      setData(calculate(values));
+
+    }
+
   };
 
   return (
@@ -75,7 +73,10 @@ export default (props) => {
                 ref={register({ required: true })}
                 name="vehicle"
                 isInvalid={errors["vehicle"]}
-                onChange={e => setVehicle(e.target.value)}
+                onChange={e => {
+                  setPolicies({})
+                  setVehicle(e.target.value)
+                }}
               >
                 {Object.keys(vehicles).map((vehicle, index) => (
                   <option key={`vehicle-${vehicle}-${index}`} value={vehicle} >
@@ -93,6 +94,22 @@ export default (props) => {
           return <Measures key={index} advanced={advanced} vehicle={vehicleType} register={register} setPolicies={setPolicies} policies={policies} errors={errors} />
         }) :
           < Measures advanced={advanced} vehicle={vehicle} register={register} setPolicies={setPolicies} policies={policies} errors={errors} />
+        }
+        {advanced &&
+          <>
+            <span>Alle</span>
+            <hr className="mt-1 mb-4" />
+            <Form.Group>
+              <Form.Label>2025</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type="number"
+                  name={`m2025`}
+                  defaultValue={0}
+                />
+              </InputGroup>
+            </Form.Group>
+          </>
         }
         <div className="mt-1 w-100 d-flex">
           <Button

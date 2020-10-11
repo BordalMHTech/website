@@ -21,10 +21,20 @@ function getAdvancedValue(carType, buttons, advancedValue) {
 
 
 
-export default function (carType, buttons, advancedValues) {
+export default function (carTypes, policies) {
     let values = {}
-    advancedValues.forEach(advancedValue => {
-        values[`${carType}${advancedValue}`] = getAdvancedValue(carType, buttons, advancedValue)
+    function math(carType) {
+        Object.keys(formula[carType]).forEach(advancedValue => {
+            let value = getAdvancedValue(carType, Object.keys(policies[carType]), advancedValue)
+            if (advancedValue === "2025") {
+                values.m2025 = values.m2025 ? values.m2025 + value : value
+            } else {
+                values[`${advancedValue}${carType}`] = value
+            }
+        })
+    }
+    carTypes.forEach(carType => {
+        math(carType)
     })
     return values
 }

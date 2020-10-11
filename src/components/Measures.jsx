@@ -14,23 +14,26 @@ export default (props) => {
         props.setPolicies(prevState => {
             prevState[props.vehicle] = {}
             policiesRef.current.forEach(policie => {
-                if (policie.checked) {
-                    prevState[props.vehicle][policie.name] = true
-                } else {
-                    prevState[props.vehicle][policie.name] = false
-                }
+                prevState[props.vehicle][policie.id] = false
             });
             return { ...prevState }
         })
     }
     const handlePolicyChange = (target) => {
+        console.log(props.vehicle)
         props.setPolicies(prevState => {
             prevState[props.vehicle][target.name] = target.checked
             return { ...prevState }
         })
     };
     const resetPolicies = () => {
-        // setPolicies(_.cloneDeep(defaultPolicies));
+        props.setPolicies(prevState => {
+            defaultPolicies.forEach(policie => {
+                prevState[props.vehicle][policie.id] = false
+
+            });
+            return { ...prevState }
+        })
     };
     return (
         <div {...props}>
@@ -50,11 +53,9 @@ export default (props) => {
                                         name={policy.id}
                                         type="switch"
                                         label={policy.label}
-                                        checked={props.policies[props.vehicle][policy.name]}
-                                        onChange={(e) => {
-                                            handlePolicyChange(e.target);
-                                        }}
-                                        id={policy.id}
+                                        checked={props.policies[props.vehicle] ? props.policies[props.vehicle][policy.id] : false}
+                                        onChange={e => handlePolicyChange(e.target)}
+                                        id={`policy-${policy.id}-${index}-${props.vehicle}`}
                                     />
                                 } else {
                                     return null
