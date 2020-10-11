@@ -23,7 +23,6 @@ export default (props) => {
   const [data, setData] = useState();
 
   const onSubmit = (values) => {
-    console.log(policies)
     // kalkulering om det er avhuking
     if (!advanced) {
       setData(calculator(vehicle === "alle" ? vehiclesType : [vehicle], policies))
