@@ -10,15 +10,25 @@ export default [
     id: "growthRate",
     label: "Bil vekst",
     value: 0,
-    showButton: ["varebiler", "personbiler", "letteLastebiler", "tyngreLastebiler"],
+    showButton: [
+      "varebiler",
+      "personbiler",
+      "letteLastebiler",
+      "tyngreLastebiler",
+    ],
     calculation: (x) => x,
   },
   {
     id: "percentElRenewable",
     label: "Prosent El Fornybar",
     value: 0,
-    showButton: ["varebiler", "personbiler", "letteLastebiler", "tyngreLastebiler"],
-    calculation: (x) => x
+    showButton: [
+      "varebiler",
+      "personbiler",
+      "letteLastebiler",
+      "tyngreLastebiler",
+    ],
+    calculation: (x) => x,
   },
   {
     id: "prosentElIFornybar",
@@ -38,8 +48,12 @@ export default [
     id: "vekstAvTellinger",
     label: "Vekst av tellinger",
     value: 0,
-    showButton: ["varebiler", "personbiler", "letteLastebiler", "tyngreLastebiler"],
-    calculation: (x) => x
+    showButton: [
+      "varebiler",
+      "personbiler",
+      "letteLastebiler",
+      "tyngreLastebiler",
+    ],
+    calculation: (x) => x,
   },
-
 ];
