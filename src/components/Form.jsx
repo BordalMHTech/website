@@ -7,7 +7,7 @@ import vehicles from "data/vehicles";
 import Feedback from "components/Feedback";
 import Visualization from "components/Visualization";
 import api from "functions/api.js";
-import calculator from "data/calculator.js";
+import calculator from "functions/calculator.js";
 import formula from "data/formula.js";
 import Policies from "components/Policies";
 
