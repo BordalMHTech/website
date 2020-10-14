@@ -3,42 +3,167 @@ import Title from "components/Title";
 import exampleData from "data/example.json";
 import "styles/semiotic.css";
 import { Button, ButtonGroup, Col, Row, Table } from "react-bootstrap";
-import _ from "lodash";
+import _, { forEach } from "lodash";
 
 import { ResponsiveLine } from "@nivo/line";
 // Gives depreciation warning, but fixes are hopefully on the way:
 // https://github.com/plouc/nivo/issues/884
 
-const colors = {
+const stdLegend = {
   El: "#23CE6B",
-  Fossil: "#566363",
-  Hybrid: "#F06449",
+  Bensin: "#566363",
+  Diesel: "#F06449",
   Hydrogen: "#5C80BC",
+  Gass: "#6CC7F6",
 };
 
-const getData = (input) => {
-  let output = [];
+const getStdData = (input, vehicle, dataKey) => {
+  const vehicleKeys = {
+    personbiler: "Personbiler",
+    varebiler: "Tyngre lastebiler",
+    letteLastebiler: "Varebiler",
+    tyngreLastebiler: "Lettere lastebiler",
+  };
 
-  const vehicles = Object.keys(input);
+  if (Object.keys(vehicleKeys).includes(vehicle)) {
+    let output = [];
+    const key = vehicleKeys[vehicle];
+    const category = input[key][dataKey];
+    const categoryKeys = Object.keys(category);
+    const years = input[key]["Year"];
 
-  vehicles.forEach((vehicle, vehicleIndex) => {
-    let data = [];
-    input[vehicle].forEach((value, valueIndex) => {
-      data.push({ x: exampleData["Year"][valueIndex], y: value });
+    categoryKeys.forEach((categoryKey, categoryIndex) => {
+      let data = [];
+      category[categoryKey].forEach((yearCount, yearCountIndex) => {
+        data.push({ x: Number(years[yearCountIndex]), y: Number(yearCount) });
+      });
+      output.push({
+        id: categoryKey,
+        color: stdLegend[categoryKey],
+        data,
+      });
     });
-    output.push({
-      id: vehicles[vehicleIndex],
-      color: colors[vehicle],
-      data,
-    });
-  });
 
-  return output;
+    return output;
+  } else if (vehicle === "alle") {
+    let sumValues = {};
+    Object.keys(vehicleKeys).forEach((vehicleKey) => {
+      const key = vehicleKeys[vehicleKey];
+      const category = input[key][dataKey];
+      const categoryKeys = Object.keys(category);
+      const years = input[key]["Year"];
+
+      categoryKeys.forEach((categoryKey) => {
+        category[categoryKey].forEach((yearValue, yearValueIndex) => {
+          if (!sumValues[categoryKey]) {
+            sumValues[categoryKey] = {};
+          }
+
+          if (sumValues[categoryKey][years[yearValueIndex]]) {
+            sumValues[categoryKey][years[yearValueIndex]] += yearValue;
+          } else {
+            sumValues[categoryKey][years[yearValueIndex]] = yearValue;
+          }
+        });
+      });
+    });
+
+    let output = [];
+
+    Object.keys(sumValues).forEach((categoryKey, categoryIndex) => {
+      let data = [];
+      Object.keys(sumValues[categoryKey]).forEach((year, yearIndex) => {
+        data.push({ x: Number(year), y: Number(sumValues[categoryKey][year]) });
+      });
+      output.push({
+        id: Object.keys(sumValues)[categoryIndex],
+        color: stdLegend[categoryKey],
+        data,
+      });
+    });
+
+    return output;
+  }
+  return [];
 };
 
-export default ({ data, ...props }) => {
-  // const ogData = _.cloneDeep(data);
+const co2Legend = {
+  Bensin: "#23CE6B",
+  "Personbiler (Diesel)": "#566363",
+  "Varebiler (Diesel)": "#F06449",
+  "Lette lastebiler (Diesel)": "#5C80BC",
+  "Tunge lastebiler (Diesel)": "#6CC7F6",
+};
 
+const getCo2 = (input, vehicle) => {
+  const parentKeys = ["CO2fromFuelSold", "CO2fromOwnedVeichles"];
+  const vehicleKeys = {
+    personbiler: ["CO2DieselPersonbiler"],
+    varebiler: ["CO2DieselVarebiler"],
+    letteLastebiler: ["CO2DieselLettereLastebiler"],
+    tyngreLastebiler: ["CO2DieselTyngreLastebiler"],
+    alle: [
+      "CO2DieselPersonbiler",
+      "CO2DieselVarebiler",
+      "CO2DieselLettereLastebiler",
+      "CO2DieselTyngreLastebiler",
+    ],
+  };
+
+  const vehicleNames = {
+    CO2Bensin: "Bensin",
+    CO2DieselPersonbiler: "Personbiler (Diesel)",
+    CO2DieselVarebiler: "Varebiler (Diesel)",
+    CO2DieselLettereLastebiler: "Lette lastebiler (Diesel)",
+    CO2DieselTyngreLastebiler: "Tunge lastebiler (Diesel)",
+  };
+
+  let sumValues = {};
+
+  if (Object.keys(vehicleKeys).includes(vehicle)) {
+    parentKeys.forEach((parentKey) => {
+      const categoryKeys = vehicleKeys[vehicle];
+      const years = input["Personbiler"]["Year"];
+      // Years shouldn't be dependent on other data, but will do for now
+
+      categoryKeys.forEach((categoryKey, categoryIndex) => {
+        const values = input[parentKey][categoryKey];
+
+        values.forEach((yearValue, yearValueIndex) => {
+          if (!sumValues[categoryKey]) {
+            sumValues[categoryKey] = {};
+          }
+
+          if (sumValues[categoryKey][years[yearValueIndex]]) {
+            sumValues[categoryKey][years[yearValueIndex]] += yearValue;
+          } else {
+            sumValues[categoryKey][years[yearValueIndex]] = yearValue;
+          }
+        });
+      });
+    });
+
+    let output = [];
+
+    Object.keys(sumValues).forEach((categoryKey, categoryIndex) => {
+      let data = [];
+      Object.keys(sumValues[categoryKey]).forEach((year, yearIndex) => {
+        data.push({ x: Number(year), y: Number(sumValues[categoryKey][year]) });
+      });
+      output.push({
+        id: Object.keys(sumValues)[categoryIndex],
+        color: co2Legend[vehicleNames[categoryKey]],
+        data,
+      });
+    });
+
+    return output;
+  }
+
+  return [];
+};
+
+export default ({ data, vehicle, ...props }) => {
   if (!data) {
     return null;
   }
@@ -47,26 +172,40 @@ export default ({ data, ...props }) => {
     {
       title: "Bilbestand",
       unit: "biler",
-      data: getData(data["Bilbestand"]),
+      data: getStdData(data, vehicle, "Bilbestand"),
+      legend: stdLegend,
     },
     {
       title: "Nybilsalg",
       unit: "biler",
-      data: getData(data["Nybilsalg"]),
+      data: getStdData(data, vehicle, "Nybilsalg"),
+      legend: stdLegend,
     },
-    { title: "CO2", unit: "tonn", data: getData(data["CO2"]) },
+    {
+      title: "CO₂",
+      unit: "tonn",
+      data: getCo2(data, vehicle),
+      legend: co2Legend,
+    },
   ];
 
   const FinalTable = ({ ...props }) => {
-    let vehicles = [];
+    // let vehicles = [];
 
-    data.forEach((d) => {
-      d.data.forEach((vehicle) => {
-        if (!vehicles.includes(vehicle.id)) {
-          vehicles.push(vehicle.id);
-        }
-      });
-    });
+    // data.forEach((d) => {
+    //   d.data.forEach((vehicle) => {
+    //     if (!vehicles.includes(vehicle.id)) {
+    //       vehicles.push(vehicle.id);
+    //     }
+    //   });
+    // });
+
+    const vehicles = [
+      "Personbiler",
+      "Tunge lastebiler",
+      "Varebiler",
+      "Lette lastebiler",
+    ];
 
     return (
       <Table striped bordered hover size="sm" {...props}>
@@ -96,9 +235,12 @@ export default ({ data, ...props }) => {
             return (
               <tr key={`table-value-${vehicle}-${index}`}>
                 <td>{vehicle}</td>
-                <td>{getValue(0)}</td>
-                <td>{getValue(1)}</td>
-                <td>{getValue(2)}</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                {/* <td>{getValue(0)}</td> */}
+                {/* <td>{getValue(1)}</td> */}
+                {/* <td>{getValue(2)}</td> */}
               </tr>
             );
           })}
@@ -108,24 +250,26 @@ export default ({ data, ...props }) => {
   };
 
   const Graphs = () => {
-    const Legend = (input) => {
-      const vehicles =
-        input.data.data && input.data.data.map((vehicle) => vehicle.id);
+    const Legend = (legend) => {
+      // const vehicles =
+      //   input.data.data && input.data.data.map((vehicle) => vehicle.id);
+
+      legend = legend.data;
 
       return (
         <div
           className="d-flex flex-wrap justify-content-center"
           style={{ position: "relative", bottom: 20 }}
         >
-          {vehicles.map((vehicle, index) => {
+          {Object.keys(legend).map((name, index) => {
             return (
               <div
-                key={`legend-${vehicle}-${index}`}
+                key={`legend-${name}-${index}`}
                 className={`d-flex align-items-center mx-2`}
               >
                 <div
                   style={{
-                    backgroundColor: colors[vehicle],
+                    backgroundColor: legend[name],
                     width: 9,
                     height: 9,
                     borderRadius: "100%",
@@ -133,7 +277,7 @@ export default ({ data, ...props }) => {
                     top: 1,
                   }}
                 ></div>
-                <small className="ml-1">{vehicle}</small>
+                <small className="ml-1">{name}</small>
               </div>
             );
           })}
@@ -225,6 +369,7 @@ export default ({ data, ...props }) => {
                   variant="light"
                   className="border"
                   onClick={() => setPercent(true)}
+                  disabled={percent}
                 >
                   <span className="d-none d-sm-inline">Prosent</span>
                   <span className="d-inline d-sm-none">%</span>
@@ -233,6 +378,7 @@ export default ({ data, ...props }) => {
                   variant="light"
                   className="border"
                   onClick={() => setPercent(false)}
+                  disabled={!percent}
                 >
                   <span className="d-none d-sm-inline">Antall</span>
                   <span className="d-inline d-sm-none">#</span>
@@ -280,7 +426,7 @@ export default ({ data, ...props }) => {
               curve="monotoneX"
               useMesh={true}
             />
-            <Legend data={d} />
+            <Legend data={d.legend} />
           </div>
         </Col>
       );
@@ -297,9 +443,9 @@ export default ({ data, ...props }) => {
   return (
     <div {...props}>
       <Title>Resultat</Title>
-      {/* Big screen table */}
       <Row className="align-items-center">
         <Col xs="12" lg="6">
+          {/* Big screen table */}
           <FinalTable
             className="d-none d-sm-table w-100"
             style={{ fontSize: 14 }}

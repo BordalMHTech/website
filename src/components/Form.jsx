@@ -39,7 +39,7 @@ export default (props) => {
   const [policies, setPolicies] = useState({});
 
   const [data, setData] = useState(example);
-  const [previewData, setPreviewData] = useState(true);
+  const [previewData, setPreviewData] = useState(false);
 
   const onSubmit = (values) => {
     handleStart();
@@ -107,8 +107,6 @@ export default (props) => {
       handlePause();
     }
   }, [timer, progress, isActive, handlePause]);
-
-  console.log(data);
 
   return (
     <div {...props}>
@@ -220,7 +218,7 @@ export default (props) => {
           </div>
         )}
 
-        {/* <Visualization data={data} className="mb-3" /> */}
+        <Visualization data={data} vehicle={vehicle} className="mb-3" />
 
         {data && (
           <>
@@ -232,7 +230,7 @@ export default (props) => {
                   type="button"
                   onClick={() => setPreviewData(true)}
                 >
-                  {`Se data`}
+                  {`Se rådata`}
                 </Button>
               </Col>
               <Col xs={12} sm={6} className="mt-1 mt-sm-0">
@@ -245,7 +243,7 @@ export default (props) => {
                   )}`}
                   download="data.json"
                 >
-                  {`Last ned data`}
+                  {`Last ned rådata`}
                 </Button>
               </Col>
             </Row>
@@ -263,11 +261,11 @@ export default (props) => {
                   <div style={{ zIndex: 1 }}>
                     <Button
                       variant="light"
-                      className="border px-1 py-0"
+                      className="border px-1 py-0 text-muted"
                       onClick={() => setPreviewData(false)}
                       // style={{ zIndex: 1 }}
                     >
-                      <b>✕</b>
+                      <b style={{ padding: 2 }}>✕</b>
                     </Button>
                   </div>
                 </div>

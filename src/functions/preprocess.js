@@ -12,7 +12,6 @@ function getAdvancedValue(carType, policies, outputName) {
     } else {
       let basis = policyObject["basis"];
       let calculation = policyObject["calculation"];
-      console.log(calculation);
       let result = basis;
 
       policies.forEach((policy) => {
