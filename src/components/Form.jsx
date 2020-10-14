@@ -38,7 +38,7 @@ export default (props) => {
   const [vehicle, setVehicle] = useState(vehiclesType[0]);
   const [policies, setPolicies] = useState({});
 
-  const [data, setData] = useState(example);
+  const [data, setData] = useState();
   const [previewData, setPreviewData] = useState(false);
 
   const onSubmit = (values) => {

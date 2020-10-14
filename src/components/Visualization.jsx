@@ -103,6 +103,7 @@ const getCo2 = (input, vehicle) => {
     letteLastebiler: ["CO2DieselLettereLastebiler"],
     tyngreLastebiler: ["CO2DieselTyngreLastebiler"],
     alle: [
+      "CO2Bensin",
       "CO2DieselPersonbiler",
       "CO2DieselVarebiler",
       "CO2DieselLettereLastebiler",
