@@ -6,20 +6,20 @@ import {
   Row,
   Col,
   ProgressBar,
+  Modal,
 } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-// import _ from "lodash";
 import municipalities from "data/municipalities";
 import vehicles from "data/vehicles";
 import Feedback from "components/Feedback";
 import Visualization from "components/Visualization";
-// import oldApi from "functions/api.js";
 import preprocess from "functions/preprocess.js";
-// import constants from "data/constants.js";
 import Policies from "components/Policies";
 import useFetch from "use-http";
 import useTimer from "hooks/useTimer";
 import Dots from "components/Dots";
+import example from "data/example.json";
+import ReactJson from "react-json-view";
 
 const vehiclesType = [
   "personbiler",
@@ -31,14 +31,15 @@ const vehiclesType = [
 export default (props) => {
   const { register, handleSubmit, errors } = useForm();
   const { get, response, loading, error } = useFetch(
-    "http://mhtech.us-west-2.elasticbeanstalk.com"
+    "http://44.242.138.218:8080"
   );
 
   const [advanced, setAdvanced] = useState(false);
   const [vehicle, setVehicle] = useState(vehiclesType[0]);
   const [policies, setPolicies] = useState({});
 
-  const [data, setData] = useState();
+  const [data, setData] = useState(example);
+  const [previewData, setPreviewData] = useState(true);
 
   const onSubmit = (values) => {
     handleStart();
@@ -71,7 +72,6 @@ export default (props) => {
     async function api(path) {
       const result = await get(path);
       if (response.ok) {
-        console.log(result);
         setData(result);
         handlePause();
         handleReset();
@@ -88,13 +88,11 @@ export default (props) => {
         ...preprocess(vehiclesType, policies),
       });
       api(path);
-      console.log("onSubmit -> path", path);
     } else {
       const path = getPath({
         ...values,
       });
       api(path);
-      console.log("onSubmit -> path", path);
     }
   };
 
@@ -109,6 +107,8 @@ export default (props) => {
       handlePause();
     }
   }, [timer, progress, isActive, handlePause]);
+
+  console.log(data);
 
   return (
     <div {...props}>
@@ -221,6 +221,63 @@ export default (props) => {
         )}
 
         {/* <Visualization data={data} className="mb-3" /> */}
+
+        {data && (
+          <>
+            <Row className="mt-3">
+              <Col xs={12} sm={6}>
+                <Button
+                  variant="light"
+                  className="border w-100"
+                  type="button"
+                  onClick={() => setPreviewData(true)}
+                >
+                  {`Se data`}
+                </Button>
+              </Col>
+              <Col xs={12} sm={6} className="mt-1 mt-sm-0">
+                <Button
+                  variant="light"
+                  className="border w-100"
+                  type="button"
+                  href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                    JSON.stringify(data)
+                  )}`}
+                  download="data.json"
+                >
+                  {`Last ned data`}
+                </Button>
+              </Col>
+            </Row>
+            <Modal
+              show={previewData}
+              centered
+              onHide={() => setPreviewData(false)}
+              // onClose={() => setPreviewData(false)}
+            >
+              <Modal.Body style={{ backgroundColor: "" }}>
+                <div
+                  className="d-flex justify-content-end"
+                  style={{ height: 0 }}
+                >
+                  <div style={{ zIndex: 1 }}>
+                    <Button
+                      variant="light"
+                      className="border px-1 py-0"
+                      onClick={() => setPreviewData(false)}
+                      // style={{ zIndex: 1 }}
+                    >
+                      <b>✕</b>
+                    </Button>
+                  </div>
+                </div>
+                <div style={{ zIndex: 0 }}>
+                  <ReactJson src={data} collapsed={1} />
+                </div>
+              </Modal.Body>
+            </Modal>
+          </>
+        )}
       </Form>
     </div>
   );
