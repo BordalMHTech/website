@@ -390,7 +390,7 @@ export default ({ data, vehicle, ...props }) => {
               motionStiffness={110}
               motionDamping={17}
               data={percent ? dPercent.data : d.data}
-              margin={{ top: 20, right: 5, bottom: 60, left: 40 }}
+              margin={{ top: 20, right: 5, bottom: 60, left: 50 }}
               xScale={{ type: "point" }}
               yScale={{
                 type: "linear",
@@ -422,8 +422,8 @@ export default ({ data, vehicle, ...props }) => {
               }}
               colors={(e) => e["color"]}
               enablePoints={false}
-              enableArea={true}
-              areaOpacity={0.05}
+              // enableArea={true}
+              // areaOpacity={0.05}
               curve="monotoneX"
               useMesh={true}
             />
