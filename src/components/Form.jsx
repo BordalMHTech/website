@@ -82,7 +82,6 @@ export default (props) => {
 
     // kalkulering om det er avhuking
     if (!advanced) {
-      console.log(preprocess(vehiclesType, policies))
       const path = getPath({
         ...values,
         ...preprocess(vehiclesType, policies),
