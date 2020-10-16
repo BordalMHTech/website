@@ -18,7 +18,6 @@ import Policies from "components/Policies";
 import useFetch from "use-http";
 import useTimer from "hooks/useTimer";
 import Dots from "components/Dots";
-import example from "data/example.json";
 import ReactJson from "react-json-view";
 
 const vehiclesType = [
@@ -83,6 +82,7 @@ export default (props) => {
 
     // kalkulering om det er avhuking
     if (!advanced) {
+      console.log(preprocess(vehiclesType, policies))
       const path = getPath({
         ...values,
         ...preprocess(vehiclesType, policies),
@@ -251,7 +251,7 @@ export default (props) => {
               show={previewData}
               centered
               onHide={() => setPreviewData(false)}
-              // onClose={() => setPreviewData(false)}
+            // onClose={() => setPreviewData(false)}
             >
               <Modal.Body style={{ backgroundColor: "" }}>
                 <div
@@ -263,7 +263,7 @@ export default (props) => {
                       variant="light"
                       className="border px-1 py-0 text-muted"
                       onClick={() => setPreviewData(false)}
-                      // style={{ zIndex: 1 }}
+                    // style={{ zIndex: 1 }}
                     >
                       <b style={{ padding: 2 }}>✕</b>
                     </Button>

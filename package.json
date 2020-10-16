@@ -14,7 +14,7 @@
     "react-dom": "16.13.1",
     "react-hook-form": "^6.8.2",
     "react-json-view": "^1.19.1",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^3.4.3",
     "semiotic": "^1.20.5",
     "use-http": "^1.0.15"
   },

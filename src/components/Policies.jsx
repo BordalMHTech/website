@@ -27,15 +27,6 @@ export default (props) => {
     });
   };
 
-  // const resetPolicies = () => {
-  //   props.setPolicies((prevState) => {
-  //     defaultPolicies.forEach((policie) => {
-  //       prevState[props.vehicle][policie.id] = false;
-  //     });
-  //     return { ...prevState };
-  //   });
-  // };
-
   return (
     <div {...props}>
       <div className="mb-4">
@@ -50,7 +41,7 @@ export default (props) => {
               {policiesRef.current.map((policy, index) => {
                 if (policy.show.includes(props.vehicle)) {
                   return (
-                    <Col xs={12} sm={6} lg={4} xl={3}>
+                    <Col key={index} xs={12} sm={6} lg={4} xl={3}>
                       <Form.Check
                         key={`policy-${policy.id}-${index}-${props.vehicle}`}
                         className="mb-3 unselectable"
@@ -93,52 +84,54 @@ export default (props) => {
           </>
         )}
       </div>
-      {props.advanced && (
-        <Row className="align-items-end">
-          {percentages.map((percentage, index) => {
-            if (percentage.show.includes(props.vehicle)) {
-              return (
-                <Col
-                  key={`percentage-${percentage.id}-${index}`}
-                  xs="12"
-                  sm="6"
-                  lg="3"
-                >
-                  <Form.Group>
-                    <Form.Label style={{ wordBreak: "break-word" }}>
-                      {percentage.label}
-                    </Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        type="number"
-                        name={`${props.vehicle}${percentage.id}`}
-                        defaultValue={percentage.value}
-                        isInvalid={
-                          props.errors[`${props.vehicle}${percentage.id}`]
-                        }
-                        ref={props.register({
-                          required: true,
-                          min: percentage.min,
-                          max: percentage.max,
-                        })}
-                      />
-                      <InputGroup.Append>
-                        <InputGroup.Text>%</InputGroup.Text>
-                      </InputGroup.Append>
-                    </InputGroup>
-                    <Feedback>
-                      {props.errors[percentage.id] &&
-                        `Må være et tall mellom ${percentage.min} og ${percentage.max}`}
-                    </Feedback>
-                  </Form.Group>
-                </Col>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </Row>
-      )}
-    </div>
+      {
+        props.advanced && (
+          <Row className="align-items-end">
+            {percentages.map((percentage, index) => {
+              if (percentage.show.includes(props.vehicle)) {
+                return (
+                  <Col
+                    key={`percentage-${percentage.id}-${index}`}
+                    xs="12"
+                    sm="6"
+                    lg="3"
+                  >
+                    <Form.Group>
+                      <Form.Label style={{ wordBreak: "break-word" }}>
+                        {percentage.label}
+                      </Form.Label>
+                      <InputGroup>
+                        <Form.Control
+                          type="number"
+                          name={`${props.vehicle}${percentage.id}`}
+                          defaultValue={percentage.value}
+                          isInvalid={
+                            props.errors[`${props.vehicle}${percentage.id}`]
+                          }
+                          ref={props.register({
+                            required: true,
+                            min: percentage.min,
+                            max: percentage.max,
+                          })}
+                        />
+                        <InputGroup.Append>
+                          <InputGroup.Text>%</InputGroup.Text>
+                        </InputGroup.Append>
+                      </InputGroup>
+                      <Feedback>
+                        {props.errors[percentage.id] &&
+                          `Må være et tall mellom ${percentage.min} og ${percentage.max}`}
+                      </Feedback>
+                    </Form.Group>
+                  </Col>
+                );
+              } else {
+                return null;
+              }
+            })}
+          </Row>
+        )
+      }
+    </div >
   );
 };

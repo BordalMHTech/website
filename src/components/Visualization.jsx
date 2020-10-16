@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Title from "components/Title";
-import exampleData from "data/example.json";
 import "styles/semiotic.css";
 import { Button, ButtonGroup, Col, Row, Table } from "react-bootstrap";
-import _, { forEach } from "lodash";
+import _ from "lodash";
 
 import { ResponsiveLine } from "@nivo/line";
 // Gives depreciation warning, but fixes are hopefully on the way:
